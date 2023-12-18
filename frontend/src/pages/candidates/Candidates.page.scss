@@ -1,0 +1,24 @@
+@import '../../mixins';
+
+.candidates {
+  .heading {
+    @include d-flex(row, space-between, center);
+    width: 100%;
+  }
+}
+
+.add-candidate{
+  @include d-flex(column, flex-start, flex-start);
+  width: 100%;
+  max-width: 400px;
+  gap: 1rem;
+
+  * {
+    color: var(--text-color1);
+  }
+}
+
+.btns {
+  @include d-flex(row, space-between, flex-start);
+  width: 100%;
+}
