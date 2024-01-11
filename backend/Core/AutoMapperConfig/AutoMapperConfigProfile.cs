@@ -13,7 +13,7 @@ namespace backend.Core.AutoMapperConfig
             //Company
             CreateMap<CompanyCreateDto, Company>();
             CreateMap<Company, CompanyGetDto>();
-
+           
             //Job
             CreateMap<JobCreateDto, Job>();
             CreateMap<Job, JobGetDto>()
