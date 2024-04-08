@@ -48,5 +48,22 @@ namespace backend.Controllers
 
             return Ok(convertedJobs);
         }
+
+        [HttpDelete]
+        [Route("Delete/{id}")]
+        public async Task<IActionResult> DeleteJob(long id)
+        {
+            var job = await _db.Jobs.FindAsync(id);
+
+            if (job == null)
+            {
+                return NotFound();
+            }
+
+            _db.Jobs.Remove(job);
+            await _db.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }

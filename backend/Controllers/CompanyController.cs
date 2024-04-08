@@ -47,11 +47,27 @@ namespace backend.Controllers
             return Ok(convertedCompanies);
         }
 
-       
+
 
         //UPDATE
 
 
         //DELETE
+        [HttpDelete]
+        [Route("Delete/{id}")]
+        public async Task<IActionResult> DeleteCompany(long id)
+        {
+            var company = await _db.Companies.FindAsync(id);
+
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            _db.Companies.Remove(company);
+            await _db.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }

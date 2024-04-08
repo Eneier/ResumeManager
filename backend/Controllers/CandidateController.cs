@@ -64,6 +64,23 @@ namespace backend.Controllers
             return Ok(convertedCandidates);
         }
 
+        [HttpDelete]
+        [Route("Delete/{id}")]
+        public async Task<IActionResult> DeleteCandidate(long id)
+        {
+            var candidate = await _db.Candidates.FindAsync(id);
+
+            if (candidate == null)
+            {
+                return NotFound();
+            }
+
+            _db.Candidates.Remove(candidate);
+            await _db.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         //Download PDF file
         [HttpGet]
         [Route("download/{url}")]

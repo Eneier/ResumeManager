@@ -14,10 +14,9 @@ const Companies = () => {
     const [loading, setLoading] = useState<Boolean>(false)
     const redirect = useNavigate()
 
-    useEffect(() => {
+    const fetchCompanies = () => {
         setLoading(true)
-        httpModule
-            .get<ICompany[]>('/Company/Get')
+        httpModule.get<ICompany[]>('/Company/Get')
             .then(res => {
                 setCompanies(res.data)
                 setLoading(false)
@@ -25,7 +24,20 @@ const Companies = () => {
             console.log(err)
             setLoading(false)
         })
+    }
+
+    useEffect(() => {
+        fetchCompanies();
     }, [])
+
+    const handleDeleteCompany = (companyId: number) => {
+        httpModule.delete(`/Company/Delete/${companyId}`)
+            .then(res => {
+                console.log("Company deleted successfully");
+                fetchCompanies();
+            })
+            .catch(err => console.error("Error deleting company:", err));
+    }
 
 
     return (
@@ -37,7 +49,7 @@ const Companies = () => {
                 </Button>
             </div>
             {loading ? <CircularProgress size={100}/> : companies.length === 0 ? <h1>No Company</h1> :
-                <CompaniesComponent data={companies}/>}
+                <CompaniesComponent data={companies} onDelete={handleDeleteCompany}/>}
         </div>
     );
 };
