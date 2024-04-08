@@ -14,10 +14,9 @@ const Candidates = () => {
     const [loading, setLoading] = useState<Boolean>(false)
     const redirect = useNavigate()
 
-    useEffect(() => {
+    const fetchCandidates = () => {
         setLoading(true)
-        httpModule
-            .get<ICandidate[]>('/Candidate/Get')
+        httpModule.get<ICandidate[]>('/Candidate/Get')
             .then(res => {
                 setCandidates(res.data)
                 setLoading(false)
@@ -25,7 +24,20 @@ const Candidates = () => {
             console.log(err)
             setLoading(false)
         })
+    }
+
+    useEffect(() => {
+        fetchCandidates();
     }, [])
+
+    const handleDeleteCandidate = (candidateId: number) => {
+        httpModule.delete(`/Candidate/Delete/${candidateId}`)
+            .then(res => {
+                console.log("Candidate deleted successfully");
+                fetchCandidates();
+            })
+            .catch(err => console.error("Error deleting candidate:", err));
+    }
 
     return (
         <div className="content candidates">
@@ -36,7 +48,7 @@ const Candidates = () => {
                 </Button>
             </div>
             {loading ? <CircularProgress size={100}/> : candidates.length === 0 ? <h1>No Candidates</h1> :
-                <CandidatesComponent data={candidates}/>}
+                <CandidatesComponent data={candidates} onDelete={handleDeleteCandidate}/>}
         </div>
     );
 };

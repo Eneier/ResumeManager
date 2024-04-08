@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import moment from "moment";
 import {ICompany} from "../../types/global.types";
 import './Companies.component.scss'
-import httpModule from "../../helpers/http.module";
 import {Button} from "@mui/material";
 
 interface ICompaniesProps {
@@ -13,8 +12,6 @@ interface ICompaniesProps {
 }
 
 const CompaniesComponent = ({data, onDelete } : ICompaniesProps) => {
-
-
 
     const columns: GridColDef[] = [
         {field: 'id', headerName: 'ID', width: 50},

@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import './Jobs.page.scss'
 import httpModule from "../../helpers/http.module";
 import {useState} from "react";
-import {IJob} from "../../types/global.types";
+import {ICompany, IJob} from "../../types/global.types";
 import {Button, CircularProgress} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {Add} from "@mui/icons-material";
@@ -14,10 +14,9 @@ const Jobs = () => {
     const [loading, setLoading] = useState<Boolean>(false)
     const redirect = useNavigate()
 
-    useEffect(() => {
+    const fetchJobs = () => {
         setLoading(true)
-        httpModule
-            .get<IJob[]>('/Job/Get')
+        httpModule.get<IJob[]>('/Job/Get')
             .then(res => {
                 setJobs(res.data)
                 setLoading(false)
@@ -25,7 +24,20 @@ const Jobs = () => {
             console.log(err)
             setLoading(false)
         })
+    }
+
+    useEffect(() => {
+        fetchJobs();
     }, [])
+
+    const handleDeleteJob = (jobId: number) => {
+        httpModule.delete(`/Job/Delete/${jobId}`)
+            .then(res => {
+                console.log("Job deleted successfully");
+                fetchJobs();
+            })
+            .catch(err => console.error("Error deleting job:", err));
+    }
 
 
     return (
@@ -37,7 +49,7 @@ const Jobs = () => {
                 </Button>
             </div>
             {loading ? <CircularProgress size={100}/> : jobs.length === 0 ? <h1>No Jobs</h1> :
-                <JobsComponent data={jobs}/>}
+                <JobsComponent data={jobs} onDelete={handleDeleteJob}/>}
         </div>
     );
 };
